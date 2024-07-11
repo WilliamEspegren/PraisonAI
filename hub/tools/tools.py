@@ -50,7 +50,6 @@ class WikipediaSearchTool(BaseTool):
 
 # pip install open-interpreter
 from interpreter import interpreter
-from praisonai_tools import BaseTool
 
 class OpenInterpreterTool(BaseTool):
     name: str = "Open Interpreter Tool"
@@ -62,6 +61,57 @@ class OpenInterpreterTool(BaseTool):
 
     def _run(self, code: str):
         result = interpreter.chat(code)
+        return result
+
+# pip install spider-client
+from spider import Spider
+
+class SpiderSearchTool(BaseTool):
+    name: str = "Spider Search Tool"
+    description: str = "Use Spider to search the web for relevant information based on a query."
+
+    def __init__(self):
+        super().__init__()
+
+    def _run(self, query: str):
+        spider = Spider()
+        params = {
+            "fetch_page_content": False,
+            "limit": 5,
+        }
+        result = spider.search(query, params=params)
+        return result
+
+class SpiderScrapeTool(BaseTool):
+    name: str = "Spider Scrape Tool"
+    description: str = "Use Spider to scrape a single url for relevant information."
+
+    def __init__(self):
+        super().__init__()
+
+    def _run(self, url: str):
+        spider = Spider()
+        params = {
+            "return_format": "markdown",
+            "limit": 5,
+        }
+        result = spider.scrape_url(url, params=params)
+        return result
+
+class SpiderCrawlTool(BaseTool):
+    name: str = "Spider Crawl Tool"
+    description: str = "Use Spider to crawl a whole website for relevant information."
+
+    def __init__(self):
+        super().__init__()
+
+    def _run(self, url: str):
+        spider = Spider()
+        params = {
+            "return_format": "markdown",
+            "limit": 5,
+        }
+        result = spider.crawl_url(url, params=params)
         return result
 
 # Example usage
